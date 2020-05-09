@@ -1,0 +1,238 @@
+
+
+
+<!DOCTYPE html>
+<html>
+<head><meta name="viewport" content="width=device-width,initial scale=1"/>
+
+    <link rel="stylesheet" type="text/css" href="http://WWW.W3schools.com/lib/W3.css"/></head>
+<head>
+    
+     <style type="text/css">
+     *{
+        margin: 0px;
+        padding:0px;
+        }
+        body{
+        margin: 0px;
+        padding:0px;
+        }
+         .heading{
+            background-color: #FF1493;
+            height: 45px;
+            border-radius: 10px;
+
+         }
+        .heading h1{
+             
+             text-align:center;
+             font-family:Century Schoolbook;
+             font-size:35px;
+             color:white;
+             font: bold;
+             position: relative;
+             bottom: 5px;
+             
+         }
+         
+     </style>
+ </head>
+ <body>
+     <div class=heading>
+         <h1>Water Level Control System </h1>
+   
+     </div>
+   <div class="marquee">
+    <marquee>
+        <font size="5px" font="bold">
+           " Water is the driving force of all nature."    Save water to save, Millions of life.   
+    </font>
+     </marquee>  
+   </div>  
+
+ </body>
+
+
+<head>
+
+
+ 
+<title>Tank Status</title>
+<!-- Styles --> 
+
+
+
+
+<script type="text/javascript" src="http://static.fusioncharts.com/code/latest/fusioncharts.js"></script>
+<script type="text/javascript" src="http://static.fusioncharts.com/code/latest/themes/fusioncharts.theme.fint.js?cacheBust=56"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+<script src="https://simeydotme.github.io/jQuery-ui-Slider-Pips/dist/js/jquery-plus-ui.min.js"></script>
+<script src="https://simeydotme.github.io/jQuery-ui-Slider-Pips/dist/js/jquery-ui-slider-pips.js"></script>
+<link rel="stylesheet" href="https://simeydotme.github.io/jQuery-ui-Slider-Pips/dist/css/jqueryui.min.css">
+<link rel="stylesheet" href="https://simeydotme.github.io/jQuery-ui-Slider-Pips/dist/css/jquery-ui-slider-pips.min.css">
+<link rel="stylesheet" href="https://simeydotme.github.io/jQuery-ui-Slider-Pips/dist/css/app.min.css">
+<style> 
+.raphael-group-7-background rect {
+fill: rgb(218, 218, 218) !important;
+}
+[id*=flat-slider].ui-slider.ui-slider-vertical {
+    height: 390px;
+    margin-top: 60px;
+    margin-right: 0%;
+    margin-left: -290%;
+}
+$bg: #808000;
+[id*=flat-slider].ui-slider,
+[id*=flat-slider].ui-slider .ui-slider-pip .ui-slider-line {
+    background: lighten($bg, 85%);
+}
+[id*=flat-slider].ui-slider .ui-slider-handle .ui-slider-tip:after {
+    border-left-color: #black;
+}
+[id*=flat-slider].ui-slider .ui-slider-handle.ui-state-hover, 
+[id*=flat-slider].ui-slider .ui-slider-handle.ui-state-focus, 
+[id*=flat-slider].ui-slider .ui-slider-handle.ui-state-active {
+      border-color: black; }
+body {
+background-image: url("");
+   
+    font-family: "Roboto";
+}
+.stuff {    
+    padding: 40px 40px 55px;
+    max-width: 150px;    
+    max-height: 450px;
+
+}
+div.inline { float:left; }
+.clearBoth { clear:both; }
+</style>
+<script>
+$(document).ready(function() {
+            setInterval("get_motor_status()", 2000);
+        });
+                
+        function get_motor_status() {
+            var someUrl = "/motor_status";
+            $.ajax({url: someUrl,dataType: "text",success: function(response) {
+                    if (response == "on")
+                        $("#status").html("ON")
+                    else
+                        $("#status").html("OFF")
+                   }})}     
+                
+    </script>
+    
+<script type="text/javascript">
+    FusionCharts.ready(function(){
+    var fusioncharts = new FusionCharts({
+    "type": "cylinder",
+    "dataFormat": "json",
+    "id": "fuelMeter",
+    "renderAt": "chart-container",
+    "width": "800",
+    "height": "400",
+    "dataSource": {
+        "chart": {
+            "theme": "fint",
+            "caption": "Water Level Status",
+            "lowerLimit": "0",
+            "upperLimit": "3",
+            "lowerLimitDisplay": "Empty",
+            "upperLimitDisplay": "Full",
+            "numberSuffix": " ltrs",
+            "showValue": "1",
+            "chartBottomMargin": "25"
+        },
+        "value": "3"
+    },
+    "events": {
+    "rendered": function(evtObj, argObj) {
+    setInterval(function() {
+    var someUrl = "/level";
+                    $.ajax({
+                        url: someUrl,
+                        dataType: "text",
+                        success: function(response) {
+                             evtObj.sender.feedData("&value=" + response);
+                        },
+                        timeout: 2000
+                    })  
+        
+        }, 1000); 
+   }
+}
+});
+    fusioncharts.render();
+    });
+</script>
+
+</head>
+
+<body>
+
+<div style="width:600px;margin:auto;">
+
+<div class="stuff">
+ 
+    <main>        
+        <div class="inline" id="flat-slider-vertical-1"></div>        
+    </main>
+    
+</div>
+    <div style="margin-left: -100px ; " class="inline" id="chart-container"></div>
+    <div class="inline"  style="background-color: #8E44AD;width: 200px;
+    height: 180px;
+    color: white;
+    border-radius: 5px;
+    padding: 2px;
+    margin: 5px;
+    margin-top: -400px;
+    margin-left: 120%;"> 
+    <h1 style="text-align: center;border-bottom-style: 2px;font-size: 25px;
+    color: white;
+    font-family: Century Schoolbook;
+    text-decoration:underline;">Motor Status</h1>
+    <p class="inline" id="status" style="color: white;text-align: center;margin:0 auto;font-size: 50px;font-family: Century Schoolbook;">ON</p>
+</div><div style="height: 10px;clear: both;"></div> 
+</div>
+
+
+<script>
+$.extend( $.ui.slider.prototype.options, { 
+    animate: 300
+});
+
+
+$("#flat-slider-vertical-1")
+    .slider({
+        max: 3,
+        min: 0,
+        range: true,
+         values: [1, 2],
+        orientation: "vertical",
+        
+        slide: function( event, ui ) {
+        console.log(ui.values);
+        var someUrl = "/configRange?lower=" + ui.values[0]+"&upper="+ui.values[1];
+            $.ajax(
+            {
+                url: someUrl,dataType: "text",success: function(response) {}
+            })               
+        }
+    })
+    .slider("pips", {
+        first: "pip",
+        last: "pip"
+    })
+    .slider("float");
+</script>
+
+    
+      <footer style="height: 40px;background-color: black;clear: both;">
+
+          <p  style="color: white;text-align: center;position: relative;top: 8px;">Copyright &copy Developed by Sunny </p>
+      </footer> 
+
+    </body>
+</html>
